@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Володя Калаганов](https://up.htmlacademy.ru/javascript/23/user/465875).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
