@@ -22,9 +22,11 @@ const USER_NAME = [
   'Надя',
 ];
 
-const userID = [];
-const urlID = [];
-const photoID = [100];
+const identifiers = {
+  user: [],
+  url: [],
+  photo: [100],
+};
 
 /**
  * Вернет новый ID и запишет его в конец массива
@@ -44,7 +46,7 @@ const createID = function (array) {
  * @returns
  */
 const createArrayComments = () => ({
-  id: createID(photoID),
+  id: createID(identifiers.photo),
   avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
   message: USER_COMMENTS[getRandomNumber(0, USER_COMMENTS.length - 1)],
   name: USER_NAME[getRandomNumber(0, USER_NAME.length - 1)],
@@ -55,8 +57,8 @@ const createArrayComments = () => ({
  * @returns
  */
 const createArrayUserDescription = () => ({
-  id: createID(userID),
-  url: `photos/${createID(urlID)}.jpg`,
+  id: createID(identifiers.user),
+  url: `photos/${createID(identifiers.url)}.jpg`,
   description: PHOTO_DESCRIPTION[getRandomNumber(0, PHOTO_DESCRIPTION.length - 1)], // Вопрос: JS Doc ругается если указать принимаемый параметр @param {Number}, при передаче (0, PHOTO_DESCRIPTION.length - 1). Какой принимаемый параметр указать?
   likes: getRandomNumber(15, 200),
   // создаем массив случайной длины
