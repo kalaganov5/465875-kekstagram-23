@@ -1,8 +1,4 @@
-import {getCommentId} from '../mock/utils.js';
-import {getRandomNumber} from '../utils.js';
-
-
-const NUMBER_PHOTO_DESCRIPTIONS = 25;
+import {getCommentId, getRandomNumber} from '../mock/utils.js';
 
 const USER_COMMENTS = [
   'Всё отлично!',
@@ -58,6 +54,15 @@ const createPicturesDescription = function (__, index) {
   };
 };
 
-const photoDescriptions = new Array(NUMBER_PHOTO_DESCRIPTIONS).fill(null).map(createPicturesDescription);
+/**
+ * Фунций по генерации массива с демо данными
+ * @param {Number} howMuchData - размер массива для генерации данных
+ * @return {*}
+ */
+const createPhotoDescriptions = function (howMuchData) {
+  return new Array(howMuchData)
+    .fill(null)
+    .map(createPicturesDescription);
+};
 
-export {createPicturesDescription, photoDescriptions};
+export {createPhotoDescriptions};
