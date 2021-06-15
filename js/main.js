@@ -1,5 +1,5 @@
-import {createArrayUserDescription} from './demo-data.js';
+import {createPhotoDescriptions} from './mock/demo-data.js';
 
-const photoDescriptionArray = new Array(25).fill(null).map(createArrayUserDescription);
+const NUMBER_PHOTO_DESCRIPTIONS = 25;
 
-photoDescriptionArray;
+createPhotoDescriptions(NUMBER_PHOTO_DESCRIPTIONS);
