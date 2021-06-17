@@ -1,5 +1,5 @@
-import {createPhotoDescriptions} from './mock/demo-data.js';
+import {generateThumbnails} from './draw-thumbnails.js';
 
 const NUMBER_PHOTO_DESCRIPTIONS = 25;
 
-createPhotoDescriptions(NUMBER_PHOTO_DESCRIPTIONS);
+generateThumbnails(NUMBER_PHOTO_DESCRIPTIONS);
