@@ -1,5 +1,5 @@
 import {isEscapeEvent} from './utils.js';
-import {clearCommentsOnClose} from './draw-big-picture.js';
+import {commentsBlock} from './draw-big-picture.js';
 
 const modal = document.querySelector('.big-picture');
 const body = document.querySelector('body');
@@ -7,7 +7,7 @@ const body = document.querySelector('body');
 /**
  * Вызов обработчика нажатий по клавиши Escape в модальном окне
  */
-const onModalEscape = function (evt) {
+const onModalEscape = (evt) => {
   if(isEscapeEvent) {
     evt.preventDefault();
     // eslint-disable-next-line no-use-before-define
@@ -18,7 +18,7 @@ const onModalEscape = function (evt) {
 /**
  * Открытие модального окна
  */
-const modalOpen = function () {
+const modalOpen = () => {
   modal.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onModalEscape);
@@ -27,10 +27,10 @@ const modalOpen = function () {
 /**
  * Закрытие модального окна и очистка комментариев к фотографии
  */
-const closeModal = function () {
+const closeModal = () => {
   modal.classList.add('hidden');
   body.classList.remove('modal-open');
-  clearCommentsOnClose();
+  commentsBlock.innerHTML = '';
   document.removeEventListener('keydown', onModalEscape);
 };
 

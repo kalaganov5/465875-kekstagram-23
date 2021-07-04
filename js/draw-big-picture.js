@@ -2,20 +2,13 @@ import {closeModal, modal} from './modal.js';
 let commentsBlock;
 
 /**
- * Очистит разметку commentsBlock
- */
-const clearCommentsOnClose = () => {
-  commentsBlock.innerHTML = '';
-};
-
-/**
  * Отрисует модальное окно
- * @param {*} imageUrl - адрес изображения
- * @param {*} likesNumber - количество лайков
+ * @param {string} imageUrl - адрес изображения
+ * @param {string} likesNumber - количество лайков
  * @param {*} comments - массив из комментариев
- * @param {*} description - описание просматриваемой фотографии
+ * @param {string} description - описание просматриваемой фотографии
  */
-const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
+const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
   // @ts-ignore
   modal.querySelector('.big-picture__img').children[0].src = imageUrl;
   modal.querySelector('.likes-count').textContent = likesNumber;
@@ -23,6 +16,7 @@ const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
 
   // рендер комментариев
   commentsBlock = modal.querySelector('.social__comments');
+
   const commentsFragment = new DocumentFragment();
 
   comments.forEach((comment) => {
@@ -53,4 +47,4 @@ const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
   modalCloseButton.addEventListener('click', closeModal);
 };
 
-export {drawBigPicture, clearCommentsOnClose};
+export {drawBigPicture, commentsBlock};

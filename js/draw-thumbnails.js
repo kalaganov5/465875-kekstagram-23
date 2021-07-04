@@ -3,11 +3,10 @@ import {drawBigPicture} from './draw-big-picture.js';
 import {modalOpen} from './modal.js';
 
 /**
- *
- * @param {*} quantity - число миниатюр для генерации
- * @return {*} Вернёт и поставит в разметку готовые миниатюры
+ * Рендер разметки миниатюр
+ * @param {number} quantity - число миниатюр для генерации
  */
-const renderThumbnails = function (quantity) {
+const renderThumbnails = (quantity) => {
   const thumbnailsBlock = document.querySelector('.pictures');
   // @ts-ignore
   const thumbnailTemplate = document.querySelector('#picture').content;
