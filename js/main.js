@@ -1,5 +1,6 @@
-import {generateThumbnails} from './draw-thumbnails.js';
+import {renderThumbnails} from './draw-thumbnails.js';
 
 const NUMBER_PHOTO_DESCRIPTIONS = 25;
 
-generateThumbnails(NUMBER_PHOTO_DESCRIPTIONS);
+renderThumbnails(NUMBER_PHOTO_DESCRIPTIONS);
+

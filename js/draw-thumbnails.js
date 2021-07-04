@@ -1,32 +1,39 @@
 import {createPhotoDescriptions} from './mock/demo-data.js';
+import {drawBigPicture} from './draw-big-picture.js';
+import {modalOpen} from './modal.js';
 
 /**
  *
  * @param {*} quantity - число миниатюр для генерации
  * @return {*} Вернёт и поставит в разметку готовые миниатюры
  */
-const generateThumbnails = function (quantity) {
+const renderThumbnails = function (quantity) {
   const thumbnailsBlock = document.querySelector('.pictures');
+  // @ts-ignore
   const thumbnailTemplate = document.querySelector('#picture').content;
   const fragmentThumbnail = document.createDocumentFragment();
 
   // Создаём миниатюры и ставим в раметку
-  createPhotoDescriptions(quantity).forEach(({url, likes, comments}) => {
+  createPhotoDescriptions(quantity).forEach(({url, likes, comments, description}) => {
     const thumbnailItem = thumbnailTemplate.cloneNode(true);
 
-    const imageSrc = thumbnailItem.querySelector('.picture__img');
-    imageSrc.src = url;
+    thumbnailItem.querySelector('.picture__img').src = url;
 
-    const imageLikes = thumbnailItem.querySelector('.picture__likes');
-    imageLikes.textContent = likes;
+    thumbnailItem.querySelector('.picture__likes').textContent = likes;
 
-    const pictureCommentsQuantity = thumbnailItem.querySelector('.picture__comments');
-    pictureCommentsQuantity.textContent = comments.length;
+    thumbnailItem.querySelector('.picture__comments').textContent = comments.length;
+
+    // Находим и слушаем клик по ссылке
+    const link = thumbnailItem.querySelector('.picture');
+    link.addEventListener('click', () => {
+      drawBigPicture(url, likes, comments, description);
+      modalOpen();
+    });
 
     fragmentThumbnail.appendChild(thumbnailItem);
   });
-
-  return thumbnailsBlock.appendChild(fragmentThumbnail); // Добавляем фрагмент в разметку
+  // Добавляем фрагмент в разметку
+  thumbnailsBlock.appendChild(fragmentThumbnail);
 };
 
-export {generateThumbnails};
+export {renderThumbnails};
