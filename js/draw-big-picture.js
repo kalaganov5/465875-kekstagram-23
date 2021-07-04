@@ -1,75 +1,90 @@
-import {createPhotoDescriptions} from './mock/demo-data.js';
 import {isEscapeEvent} from './utils.js';
-const photo = createPhotoDescriptions(25);
 
-// Удаляем наложение
-const overlay = document.querySelector('.big-picture');
-overlay.classList.remove('hidden');
-
-const modalOpen = function () {
-  overlay.classList.remove('hidden');
-};
-
-// Адрес изображения
-const image = overlay.querySelector('.big-picture__img');
-image.children[0].src = photo[0].url;
-
-// лайки
-const likes = overlay.querySelector('.likes-count');
-likes.textContent = photo[0].likes;
-
-// колличество комментариев
-const commentsCount = overlay.querySelector('.comments-count');
-commentsCount.textContent = photo[0].comments.length;
-
-// вывод комментария
-const commentsBlock = overlay.querySelector('.social__comments');
-const commentsFragment = new DocumentFragment();
-
-photo[0].comments.forEach((comment) => {
-  const itemComment = document.createElement('li');
-  itemComment.setAttribute('class', 'social__comment');
-
-  const imageAuthor = document.createElement('img');
-  imageAuthor.setAttribute('class', 'social__picture');
-  imageAuthor.setAttribute('src', comment.avatar);
-  imageAuthor.setAttribute('alt', comment.name);
-  imageAuthor.setAttribute('width', '35');
-  imageAuthor.setAttribute('height', '35');
-
-  const paragraph = document.createElement('p');
-  paragraph.setAttribute('class', 'social__text');
-  paragraph.innerText = comment.message;
-
-  itemComment.appendChild(imageAuthor);
-  itemComment.appendChild(paragraph);
-  commentsFragment.appendChild(itemComment);
-});
-commentsBlock.appendChild(commentsFragment);
-
-const descriptionPhoto = overlay.querySelector('.social__caption');
-descriptionPhoto.textContent = photo[0].description;
-
-const commentsRange = overlay.querySelector('.social__comment-count');
-commentsRange.classList.add('hidden');
-
-const commentsLoader = overlay.querySelector('.comments-loader');
-commentsLoader.classList.add('hidden');
-
+const modal = document.querySelector('.big-picture');
 const body = document.querySelector('body');
-body.classList.add('modal-open');
 
-const modalClose = overlay.querySelector('#picture-cancel');
-
-const closeModal = function () {
-  overlay.classList.add('hidden');
+/**
+ * Очистит разметку для переданного элемента
+ * @param {*} commentsList - передаем разметку комметариев
+ */
+const clearCommentsOnClose = (commentsList) => {
+  commentsList.innerHTML = '';
 };
 
-modalClose.addEventListener('click', closeModal);
+/**
+ * Открытие модального окна
+ */
+const modalOpen = function () {
+  modal.classList.remove('hidden');
+  body.classList.add('modal-open');
+};
 
-document.addEventListener('keydown', (evt) => {
+/**
+ * Закрытие модального окна и очистка комментариев к фотографии
+ */
+const closeModal = function (commentsList) {
+  modal.classList.add('hidden');
+  body.classList.remove('modal-open');
+  clearCommentsOnClose(commentsList);
+  
+};
+
+const onModalEscape = function (evt, commentsList) {
   if(isEscapeEvent) {
     evt.preventDefault();
-    overlay.classList.add('hidden');
+    closeModal(commentsList);
   }
-});
+};
+
+const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
+
+  modal.querySelector('.big-picture__img').children[0].src = imageUrl;
+  modal.querySelector('.likes-count').textContent = likesNumber;
+  modal.querySelector('.comments-count').textContent = comments.length;
+
+  // вывод комментария
+  const commentsBlock = modal.querySelector('.social__comments');
+  const commentsFragment = new DocumentFragment();
+
+  comments.forEach((comment) => {
+    const itemComment = document.createElement('li');
+    itemComment.setAttribute('class', 'social__comment');
+
+    const imageAuthor = document.createElement('img');
+    imageAuthor.setAttribute('class', 'social__picture');
+    imageAuthor.setAttribute('src', comment.avatar);
+    imageAuthor.setAttribute('alt', comment.name);
+    imageAuthor.setAttribute('width', '35');
+    imageAuthor.setAttribute('height', 35);
+
+    const paragraph = document.createElement('p');
+    paragraph.setAttribute('class', 'social__text');
+    paragraph.innerText = comment.message;
+
+    itemComment.appendChild(imageAuthor);
+    itemComment.appendChild(paragraph);
+    commentsFragment.appendChild(itemComment);
+  });
+
+  commentsBlock.appendChild(commentsFragment);
+
+  modal.querySelector('.social__caption').textContent = description;
+
+  modal.querySelector('.social__comment-count').classList.add('hidden');
+
+  modal.querySelector('.comments-loader').classList.add('hidden');
+
+  modalOpen();
+
+  document.addEventListener('keydown', (evt) => {
+    onModalEscape(evt, commentsBlock);
+  });
+
+  const modalCloseButton = modal.querySelector('#picture-cancel');
+
+  modalCloseButton.addEventListener('click', () => {
+    closeModal(commentsBlock);
+  });
+};
+
+export {drawBigPicture};
