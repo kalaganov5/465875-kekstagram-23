@@ -13,7 +13,7 @@ const isStringNotLong = function (string, maxLength) {
  * @return {*}
  */
 const isEscapeEvent = (evt) => {
-  return evt.key === 'Escape' || evt.key === 'Esc;'
+  evt.key === 'Escape' || evt.key === 'Esc;';
 };
 
 export {isStringNotLong, isEscapeEvent};

@@ -1,49 +1,28 @@
-import {isEscapeEvent} from './utils.js';
-
-const modal = document.querySelector('.big-picture');
-const body = document.querySelector('body');
+import {closeModal, modal} from './modal.js';
+let commentsBlock;
 
 /**
- * Очистит разметку для переданного элемента
- * @param {*} commentsList - передаем разметку комметариев
+ * Очистит разметку commentsBlock
  */
-const clearCommentsOnClose = (commentsList) => {
-  commentsList.innerHTML = '';
+const clearCommentsOnClose = () => {
+  commentsBlock.innerHTML = '';
 };
 
 /**
- * Открытие модального окна
+ * Отрисует модальное окно
+ * @param {*} imageUrl - адрес изображения
+ * @param {*} likesNumber - количество лайков
+ * @param {*} comments - массив из комментариев
+ * @param {*} description - описание просматриваемой фотографии
  */
-const modalOpen = function () {
-  modal.classList.remove('hidden');
-  body.classList.add('modal-open');
-};
-
-/**
- * Закрытие модального окна и очистка комментариев к фотографии
- */
-const closeModal = function (commentsList) {
-  modal.classList.add('hidden');
-  body.classList.remove('modal-open');
-  clearCommentsOnClose(commentsList);
-  
-};
-
-const onModalEscape = function (evt, commentsList) {
-  if(isEscapeEvent) {
-    evt.preventDefault();
-    closeModal(commentsList);
-  }
-};
-
 const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
-
+  // @ts-ignore
   modal.querySelector('.big-picture__img').children[0].src = imageUrl;
   modal.querySelector('.likes-count').textContent = likesNumber;
   modal.querySelector('.comments-count').textContent = comments.length;
 
-  // вывод комментария
-  const commentsBlock = modal.querySelector('.social__comments');
+  // рендер комментариев
+  commentsBlock = modal.querySelector('.social__comments');
   const commentsFragment = new DocumentFragment();
 
   comments.forEach((comment) => {
@@ -55,7 +34,7 @@ const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
     imageAuthor.setAttribute('src', comment.avatar);
     imageAuthor.setAttribute('alt', comment.name);
     imageAuthor.setAttribute('width', '35');
-    imageAuthor.setAttribute('height', 35);
+    imageAuthor.setAttribute('height', '35');
 
     const paragraph = document.createElement('p');
     paragraph.setAttribute('class', 'social__text');
@@ -67,24 +46,11 @@ const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
   });
 
   commentsBlock.appendChild(commentsFragment);
-
   modal.querySelector('.social__caption').textContent = description;
-
   modal.querySelector('.social__comment-count').classList.add('hidden');
-
   modal.querySelector('.comments-loader').classList.add('hidden');
-
-  modalOpen();
-
-  document.addEventListener('keydown', (evt) => {
-    onModalEscape(evt, commentsBlock);
-  });
-
   const modalCloseButton = modal.querySelector('#picture-cancel');
-
-  modalCloseButton.addEventListener('click', () => {
-    closeModal(commentsBlock);
-  });
+  modalCloseButton.addEventListener('click', closeModal);
 };
 
-export {drawBigPicture};
+export {drawBigPicture, clearCommentsOnClose};
