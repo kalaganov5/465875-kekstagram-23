@@ -21,7 +21,7 @@ const commentsId = []; // Без массива случайное и уника
  * !С функцией есть проблема, если создавать например 9999 уникальных случайных id, то вылетит undefined из за цикличности
  * @return {number}
  */
-const getCommentId = function () {
+const getCommentId = () => {
   const randomId = getRandomNumber(1, 9999);
   if (commentsId.indexOf(randomId) === -1) {
     commentsId.push(randomId);
