@@ -1,6 +1,6 @@
-import {isEscapeEvent} from './utils.js';
 import {closeModalBigPicture} from './draw-big-picture.js';
-import {modalEditImage} from './handler-form.js';
+import {closeModalEditImage} from './handler-form.js';
+import {hasInput} from './utils.js';
 
 const body = document.querySelector('body');
 const whatModalOpen = {
@@ -12,13 +12,14 @@ const whatModalOpen = {
  * Вызов обработчика нажатий по клавиши Escape в модальном окне
  */
 const onModalEscape = (evt) => {
-  if(isEscapeEvent) {
+  if(evt.key === 'Escape' || evt.key === 'Esc;') {
     evt.preventDefault();
-    if (whatModalOpen.isModalBigPicture) {
+    if (hasInput.hashtags) {
+      evt.stopPropagation();
+    } else if (whatModalOpen.isModalBigPicture) {
       closeModalBigPicture();
-    }
-    if (whatModalOpen.isModalFormEditor) {
-      closeModal(modalEditImage);
+    } else if (whatModalOpen.isModalFormEditor) {
+      closeModalEditImage();
     }
   }
 };
@@ -45,4 +46,4 @@ const closeModal = (elementModal) => {
   whatModalOpen.isModalFormEditor = false;
 };
 
-export {modalOpen, closeModal, onModalEscape, whatModalOpen};
+export {modalOpen, closeModal, whatModalOpen};

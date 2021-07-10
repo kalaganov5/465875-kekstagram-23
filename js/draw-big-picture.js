@@ -2,6 +2,7 @@ import {closeModal} from './modal.js';
 let commentsBlock;
 
 const modalBigPicture = document.querySelector('.big-picture');
+const modalCloseButton = modalBigPicture.querySelector('#picture-cancel');
 
 /**
  * Закрытие модального окна полноэкранного изображения
@@ -9,6 +10,7 @@ const modalBigPicture = document.querySelector('.big-picture');
 const closeModalBigPicture = () => {
   closeModal(modalBigPicture);
   commentsBlock.innerHTML = '';
+  modalCloseButton.removeEventListener('click', closeModalBigPicture);
 };
 
 /**
@@ -53,8 +55,7 @@ const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
   modalBigPicture.querySelector('.social__caption').textContent = description;
   modalBigPicture.querySelector('.social__comment-count').classList.add('hidden');
   modalBigPicture.querySelector('.comments-loader').classList.add('hidden');
-  const modalCloseButton = modalBigPicture.querySelector('#picture-cancel');
   modalCloseButton.addEventListener('click', closeModalBigPicture);
 };
 
-export {drawBigPicture, modalBigPicture, closeModalBigPicture};
+export {drawBigPicture, modalBigPicture, closeModalBigPicture, modalCloseButton};

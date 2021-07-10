@@ -7,13 +7,9 @@ const isStringNotLong = function (string, maxLength) {
   return string.length <= maxLength;
 };
 
-/**
- * Функцию отлавливает нажатие на Esc клавишу
- * @param {*} evt
- * @return {*}
- */
-const isEscapeEvent = (evt) => {
-  evt.key === 'Escape' || evt.key === 'Esc;';
+const hasInput = {
+  hashtags: false,
+  textarea: false,
 };
 
-export {isStringNotLong, isEscapeEvent};
+export {isStringNotLong, hasInput};
