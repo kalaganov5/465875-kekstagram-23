@@ -1,37 +1,49 @@
-import {isEscapeEvent} from './utils.js';
-import {clearCommentsOnClose} from './draw-big-picture.js';
+import {closeModalBigPicture} from './draw-big-picture.js';
+import {closeModalEditImage} from './handler-form.js';
+import {hasInput} from './utils.js';
 
-const modal = document.querySelector('.big-picture');
 const body = document.querySelector('body');
+const whatModalOpen = {
+  isModalBigPicture: false,
+  isModalFormEditor: false,
+};
 
 /**
  * Вызов обработчика нажатий по клавиши Escape в модальном окне
  */
-const onModalEscape = function (evt) {
-  if(isEscapeEvent) {
+const onModalEscape = (evt) => {
+  if(evt.key === 'Escape' || evt.key === 'Esc;') {
     evt.preventDefault();
-    // eslint-disable-next-line no-use-before-define
-    closeModal();
+    if (hasInput.hashtags) {
+      evt.stopPropagation();
+    } else if (whatModalOpen.isModalBigPicture) {
+      closeModalBigPicture();
+    } else if (whatModalOpen.isModalFormEditor) {
+      closeModalEditImage();
+    }
   }
 };
 
 /**
  * Открытие модального окна
  */
-const modalOpen = function () {
-  modal.classList.remove('hidden');
+const modalOpen = (elementModal) => {
+  elementModal.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onModalEscape);
 };
 
 /**
  * Закрытие модального окна и очистка комментариев к фотографии
+ * @param {object} elementModal - Модальное окно
  */
-const closeModal = function () {
-  modal.classList.add('hidden');
+const closeModal = (elementModal) => {
+  elementModal.classList.add('hidden');
   body.classList.remove('modal-open');
-  clearCommentsOnClose();
   document.removeEventListener('keydown', onModalEscape);
+  // Ставим признак что модальное окно закрыто
+  whatModalOpen.isModalBigPicture = false;
+  whatModalOpen.isModalFormEditor = false;
 };
 
-export {modalOpen, closeModal, modal};
+export {modalOpen, closeModal, whatModalOpen};

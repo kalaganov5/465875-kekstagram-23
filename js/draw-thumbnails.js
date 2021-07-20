@@ -1,13 +1,12 @@
 import {createPhotoDescriptions} from './mock/demo-data.js';
-import {drawBigPicture} from './draw-big-picture.js';
-import {modalOpen} from './modal.js';
+import {drawBigPicture, modalBigPicture} from './draw-big-picture.js';
+import {modalOpen, whatModalOpen} from './modal.js';
 
 /**
- *
- * @param {*} quantity - число миниатюр для генерации
- * @return {*} Вернёт и поставит в разметку готовые миниатюры
+ * Рендер разметки миниатюр
+ * @param {number} quantity - число миниатюр для генерации
  */
-const renderThumbnails = function (quantity) {
+const renderThumbnails = (quantity) => {
   const thumbnailsBlock = document.querySelector('.pictures');
   // @ts-ignore
   const thumbnailTemplate = document.querySelector('#picture').content;
@@ -27,7 +26,8 @@ const renderThumbnails = function (quantity) {
     const link = thumbnailItem.querySelector('.picture');
     link.addEventListener('click', () => {
       drawBigPicture(url, likes, comments, description);
-      modalOpen();
+      modalOpen(modalBigPicture);
+      whatModalOpen.isModalBigPicture = true;
     });
 
     fragmentThumbnail.appendChild(thumbnailItem);

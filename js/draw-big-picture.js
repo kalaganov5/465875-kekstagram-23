@@ -1,28 +1,34 @@
-import {closeModal, modal} from './modal.js';
+import {closeModal} from './modal.js';
 let commentsBlock;
 
+const modalBigPicture = document.querySelector('.big-picture');
+const modalCloseButton = modalBigPicture.querySelector('#picture-cancel');
+
 /**
- * Очистит разметку commentsBlock
+ * Закрытие модального окна полноэкранного изображения
  */
-const clearCommentsOnClose = () => {
+const closeModalBigPicture = () => {
+  closeModal(modalBigPicture);
   commentsBlock.innerHTML = '';
+  modalCloseButton.removeEventListener('click', closeModalBigPicture);
 };
 
 /**
  * Отрисует модальное окно
- * @param {*} imageUrl - адрес изображения
- * @param {*} likesNumber - количество лайков
+ * @param {string} imageUrl - адрес изображения
+ * @param {string} likesNumber - количество лайков
  * @param {*} comments - массив из комментариев
- * @param {*} description - описание просматриваемой фотографии
+ * @param {string} description - описание просматриваемой фотографии
  */
-const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
+const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
   // @ts-ignore
-  modal.querySelector('.big-picture__img').children[0].src = imageUrl;
-  modal.querySelector('.likes-count').textContent = likesNumber;
-  modal.querySelector('.comments-count').textContent = comments.length;
+  modalBigPicture.querySelector('.big-picture__img').children[0].src = imageUrl;
+  modalBigPicture.querySelector('.likes-count').textContent = likesNumber;
+  modalBigPicture.querySelector('.comments-count').textContent = comments.length;
 
   // рендер комментариев
-  commentsBlock = modal.querySelector('.social__comments');
+  commentsBlock = modalBigPicture.querySelector('.social__comments');
+
   const commentsFragment = new DocumentFragment();
 
   comments.forEach((comment) => {
@@ -46,11 +52,10 @@ const drawBigPicture = function (imageUrl, likesNumber, comments, description) {
   });
 
   commentsBlock.appendChild(commentsFragment);
-  modal.querySelector('.social__caption').textContent = description;
-  modal.querySelector('.social__comment-count').classList.add('hidden');
-  modal.querySelector('.comments-loader').classList.add('hidden');
-  const modalCloseButton = modal.querySelector('#picture-cancel');
-  modalCloseButton.addEventListener('click', closeModal);
+  modalBigPicture.querySelector('.social__caption').textContent = description;
+  modalBigPicture.querySelector('.social__comment-count').classList.add('hidden');
+  modalBigPicture.querySelector('.comments-loader').classList.add('hidden');
+  modalCloseButton.addEventListener('click', closeModalBigPicture);
 };
 
-export {drawBigPicture, clearCommentsOnClose};
+export {drawBigPicture, modalBigPicture, closeModalBigPicture, modalCloseButton};
