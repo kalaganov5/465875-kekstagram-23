@@ -1,5 +1,6 @@
 import {modalOpen, closeModal, whatModalOpen} from './modal.js';
 import {hasInput} from './utils.js';
+const SCALE_STEP = 25;
 const form = document.querySelector('#upload-select-image');
 const uploadImage = form.querySelector('#upload-file');
 const modalEditImage = document.querySelector('.img-upload__overlay');
@@ -8,6 +9,40 @@ const inputHashtags = form.querySelector('.text__hashtags');
 const hashtagPattern = /^#[A-Za-zА-Яа-я0-9-EеЁё]{1,19}$/;
 const comment = form.querySelector('.text__description');
 let hashtags;
+const scaleImage = form.querySelector('.img-upload__scale');
+const uploadImagePreview = form.querySelector('.img-upload__preview');
+const scaleSmaller = form.querySelector('.scale__control--smaller');
+const scaleBigger = form.querySelector('.scale__control--bigger');
+const scaleValue = form.querySelector('.scale__control--value');
+
+/**
+ * Масштабирование изображения
+ */
+const imageResizeHandler = (evt, setDefault) => {
+  let scale = +scaleValue.value.replace('%', '');
+  const imagePreview = uploadImagePreview.querySelector('img');
+  if (evt.target === scaleSmaller && scale !== 25) {
+    scale -= SCALE_STEP;
+    imagePreview.style.transform = `scale(0.${scale})`;
+    scaleValue.value = `${scale}%`;
+  } else if (evt.target === scaleBigger && scale !== 100) {
+    scale += SCALE_STEP;
+    imagePreview.style.transform = `scale(0.${scale})`;
+    imagePreview.style.transform = `scale(${scale === 100 ? '1' : `0.${scale}`})`;
+    scaleValue.value = `${scale}%`;
+  } else if (setDefault) {
+    imagePreview.style.transform = 'scale(1)';
+  }
+};
+
+/**
+ * Сброс всех изменений в форме
+ */
+const setFormDefaultValue = () => {
+  form.reset();
+  imageResizeHandler(false, true);
+};
+
 
 /**
  * Находит дубликаты в массиве
@@ -88,12 +123,13 @@ function inputHashtagFocusOut() {
  */
 const closeModalEditImage = () => {
   closeModal(modalEditImage);
-  form.reset();
+  setFormDefaultValue();
   closeModalUpload.removeEventListener('click', сloseModalButton);
   inputHashtags.removeEventListener('input', hashtagValidationLive);
   inputHashtags.removeEventListener('focusout', inputHashtagFocusOut);
   comment.removeEventListener('focusout', inputCommetsFocusOut);
   comment.removeEventListener('focusin', inputCommetsFocusIn);
+  scaleImage.removeEventListener('click', imageResizeHandler);
 };
 
 /**
@@ -121,6 +157,7 @@ const trackUploadImage = () => {
   inputHashtags.addEventListener('focusout', inputHashtagFocusOut);
   comment.addEventListener('focusout', inputCommetsFocusOut);
   comment.addEventListener('focusin', inputCommetsFocusIn);
+  scaleImage.addEventListener('click', imageResizeHandler);
 };
 
 /*
