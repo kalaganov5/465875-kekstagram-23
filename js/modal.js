@@ -14,7 +14,7 @@ const whatModalOpen = {
 const onModalEscape = (evt) => {
   if(evt.key === 'Escape' || evt.key === 'Esc;') {
     evt.preventDefault();
-    if (hasInput.hashtags) {
+    if (hasInput.hashtags || hasInput.textarea) {
       evt.stopPropagation();
     } else if (whatModalOpen.isModalBigPicture) {
       closeModalBigPicture();

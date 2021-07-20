@@ -70,6 +70,13 @@ const hashtagValidationLive = () => {
 };
 
 /**
+* При установки фокуса в поле ввода комментариев поставит признак true
+*/
+function inputCommetsFocusIn() {
+  hasInput.textarea = true;
+}
+
+/**
 * При снятие фокуса с поле ввода хэш-тега поставит признак false
 */
 function inputHashtagFocusOut() {
@@ -86,6 +93,7 @@ const closeModalEditImage = () => {
   inputHashtags.removeEventListener('input', hashtagValidationLive);
   inputHashtags.removeEventListener('focusout', inputHashtagFocusOut);
   comment.removeEventListener('focusout', inputCommetsFocusOut);
+  comment.removeEventListener('focusin', inputCommetsFocusIn);
 };
 
 /**
@@ -111,6 +119,8 @@ const trackUploadImage = () => {
   closeModalUpload.addEventListener('click', сloseModalButton);
   inputHashtags.addEventListener('input', hashtagValidationLive);
   inputHashtags.addEventListener('focusout', inputHashtagFocusOut);
+  comment.addEventListener('focusout', inputCommetsFocusOut);
+  comment.addEventListener('focusin', inputCommetsFocusIn);
 };
 
 /*
