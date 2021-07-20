@@ -70,10 +70,10 @@ const hashtagValidationLive = () => {
 };
 
 /**
-* При снятие фокуса с поле ввода комментария поставит признак false
+* При снятие фокуса с поле ввода хэш-тега поставит признак false
 */
 function inputHashtagFocusOut() {
-  hasInput.textarea = false;
+  hasInput.hashtags = false;
 }
 
 /**
