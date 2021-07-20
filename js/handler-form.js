@@ -6,17 +6,26 @@ const modalEditImage = document.querySelector('.img-upload__overlay');
 const closeModalUpload = form.querySelector('#upload-cancel');
 const inputHashtags = form.querySelector('.text__hashtags');
 const hashtagPattern = /^#[A-Za-zА-Яа-я0-9-EеЁё]{1,19}$/;
-
-const hasDuplicates = (array) => (new Set(array)).size !== array.length;
-
+const comment = form.querySelector('.text__description');
 let hashtags;
 
+/**
+ * Находит дубликаты в массиве
+ * @param {Array} array - проверяемый массив
+ */
+const hasDuplicates = (array) => (new Set(array)).size !== array.length;
+
+/**
+ * Валидация хэш-тега при вводе
+ */
 const hashtagValidationLive = () => {
   hasInput.hashtags = true;
   // Создаём массив из хештегов
   hashtags = inputHashtags.value.toLowerCase().split(' ');
   for (let i = 0; i < hashtags.length; i++) {
-    if (hashtags[i][0] !== '#' && hashtags[i].length >= 1) {
+    if (hashtags.length === 0) {
+      inputHashtags.setCustomValidity('');
+    } else if (hashtags[i][0] !== '#' && hashtags[i].length >= 1) {
       // начинаем с решетки, иначе ставим
       // Добавляем у вводимого элемента #
       hashtags.splice(i, 1, `#${hashtags[i]}`);
@@ -33,33 +42,39 @@ const hashtagValidationLive = () => {
     } else if (hashtags[i].indexOf('#', 2) !== -1 || hashtags[i][1] === '#') {
       // Проверка вторым символом или последующим #
       inputHashtags.setCustomValidity(`# только вначале ${hashtags[i]}`);
+      break;
     } else if (hashtags[i].length > 20) {
       inputHashtags.setCustomValidity(`Хэш-тег "${hashtags[i]}" не может быть более 20 символов. У вас ${hashtags[i].length}`);
+      break;
     } else if (hasDuplicates(hashtags) && hashtags[hashtags.length - 1] !== '') {
       inputHashtags.setCustomValidity(`Такой уже есть. ${hashtags[i].toUpperCase()} и ${hashtags[i].toLowerCase()} равны`);
+      break;
     } else if (hashtags.length > 5 && hashtags[hashtags.length - 1] !== '') {
       inputHashtags.setCustomValidity(`Не более 5 хэштегов, лишний "${hashtags[hashtags.length - 1]}"`);
+      break;
     } else {
-      inputHashtags.setCustomValidity('');
+      // Конструкция нужно для финальной проверки, например #fafdsaf # #sdafdsadfasf
+      for (let j = 0; j < hashtags.length; j++) {
+        if (hashtags[j] === '' && hashtags.length > 1) {
+          // 1 Проверить что последний хэштег не пустой иначе удалить его
+          hashtags.splice(j, 1);
+        } else if (hashtagPattern.test(hashtags[j]) === false && hashtags[j] !== '') {
+          inputHashtags.setCustomValidity(`Хэштег "${hashtags[j]}" не может содержать спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.`);
+          break;
+        } else {
+          inputHashtags.setCustomValidity('');
+        }
+      }
     }
   }
 };
 
-const finalValidate = (evt) => {
-
-  evt.preventDefault();
-  if (hashtags !== undefined) {
-    hashtags.forEach((element, index) => {
-      // 1 Проверить что последний хэштег не пустой иначе удалить его
-      if (element === '') {
-        hashtags.splice(index, 1);
-      } else if (hashtagPattern.test(element) === false) {
-        inputHashtags.setCustomValidity(`Хэштег "${element}" не может содержать спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.`);
-      }
-    });
-  }
-  form.reportValidity();
-};
+/**
+* При снятие фокуса с поле ввода комментария поставит признак false
+*/
+function inputHashtagFocusOut() {
+  hasInput.textarea = false;
+}
 
 /**
  * Закрытие модального окна полноэкранного изображения
@@ -67,20 +82,25 @@ const finalValidate = (evt) => {
 const closeModalEditImage = () => {
   closeModal(modalEditImage);
   form.reset();
-  closeModalUpload.removeEventListener('click', trackCloseButton);
+  closeModalUpload.removeEventListener('click', сloseModalButton);
   inputHashtags.removeEventListener('input', hashtagValidationLive);
-  inputHashtags.removeEventListener('focusout', inputHastagFocusOut);
-
-  form.removeEventListener('submit', finalValidate);
+  inputHashtags.removeEventListener('focusout', inputHashtagFocusOut);
+  comment.removeEventListener('focusout', inputCommetsFocusOut);
 };
 
-const inputHastagFocusOut = () => {
-  hasInput.hashtags = false;
-};
+/**
+* При снятие фокуса с поле textarea поставит признак false
+*/
+function inputCommetsFocusOut () {
+  hasInput.textarea = false;
+}
 
-const trackCloseButton = () => {
+/**
+ * Закрытие окна по кнопке Х
+ */
+function сloseModalButton() {
   closeModalEditImage();
-};
+}
 
 /**
  * Открывает модальное окно если избражение загружено
@@ -88,10 +108,9 @@ const trackCloseButton = () => {
 const trackUploadImage = () => {
   modalOpen(modalEditImage);
   whatModalOpen.isModalFormEditor = true;
-  closeModalUpload.addEventListener('click', trackCloseButton);
+  closeModalUpload.addEventListener('click', сloseModalButton);
   inputHashtags.addEventListener('input', hashtagValidationLive);
-  inputHashtags.addEventListener('focusout', inputHastagFocusOut);
-  form.addEventListener('submit', finalValidate);
+  inputHashtags.addEventListener('focusout', inputHashtagFocusOut);
 };
 
 /*
