@@ -9,18 +9,21 @@ const closeModalUpload = form.querySelector('#upload-cancel');
 const inputHashtags = form.querySelector('.text__hashtags');
 const hashtagPattern = /^#[A-Za-zА-Яа-я0-9-EеЁё]{1,19}$/;
 const comment = form.querySelector('.text__description');
-let hashtags;
 const scaleImage = form.querySelector('.img-upload__scale');
 const uploadImagePreview = form.querySelector('.img-upload__preview');
 const scaleSmaller = form.querySelector('.scale__control--smaller');
 const scaleBigger = form.querySelector('.scale__control--bigger');
 const scaleValue = form.querySelector('.scale__control--value');
 const effect = form.querySelector('.effects');
-
 const effectSlider = form.querySelector('.effect-level__slider');
 const effectValue = form.querySelector('.effect-level__value');
 const effectedElements = {element: '', effectClass: ''};
 const effectLevelBlock = form.querySelector('.effect-level');
+let hashtags;
+let closeSuccessModalButton;
+let modalSucces;
+let closeErrorModalButton;
+let modalError;
 
 noUiSlider.create(effectSlider, {
   range: {
@@ -221,18 +224,25 @@ function inputHashtagFocusOut() {
   hasInput.hashtags = false;
 }
 
+/**
+ * Закрытие окна
+ */
 const onModalSuccessClick = (evt) => {
   if (evt.target.matches('.success')) {
     closeSuccessMessage();
   }
 };
 
+/**
+ * Закрытие окна успешной отправки формы, при нажатие на кнопку
+ */
 const onSuccessModalCloseButton = () => {
   closeSuccessMessage();
 };
 
-let closeSuccessModalButton;
-let modalSucces;
+/**
+ * Показ окна, при успешной отправке фотографии
+ */
 const showSuccessMessage = () => {
   const successTemplate = document.querySelector('#success').content.cloneNode(true);
   whatModalOpen.isModalSubmit = true;
@@ -244,6 +254,9 @@ const showSuccessMessage = () => {
   closeSuccessModalButton.addEventListener('click', onSuccessModalCloseButton);
 };
 
+/**
+ * Удаление окна при упешной отправке изображения
+ */
 function closeSuccessMessage () {
   whatModalOpen.isModalSubmit = false;
   closeSuccessModalButton.removeEventListener('click', onSuccessModalCloseButton);
@@ -252,18 +265,25 @@ function closeSuccessMessage () {
   document.removeEventListener('keydown', onModalEscape);
 }
 
+/**
+ * Закрытие окна ошибки, по клику кнопке попробовать ещё раз
+ */
 const onErrorModalCloseButton = () => {
   closeErrorMessage();
 };
 
+/**
+ * Закрытие окна ошибки, по клику за пределы окна
+ */
 const onModalErrorsClick = (evt) => {
   if (evt.target.matches('.error')) {
     closeErrorMessage();
   }
 };
 
-let closeErrorModalButton;
-let modalError;
+/**
+ * Показ ошибки, если данные не удалось отправить
+ */
 const showErrorsMessage = () => {
   const successTemplate = document.querySelector('#error').content.cloneNode(true);
   whatModalOpen.isModalError = true;
