@@ -3,7 +3,7 @@ import {modalOpen, whatModalOpen} from './modal.js';
 
 /**
  * Рендер разметки миниатюр
- * @param {number} quantity - число миниатюр для генерации
+ * @param {Array} array - Массив с данными
  */
 const renderThumbnails = (array) => {
   const thumbnailsBlock = document.querySelector('.pictures');
