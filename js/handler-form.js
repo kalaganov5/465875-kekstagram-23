@@ -219,6 +219,7 @@ const hashtagValidationLive = () => {
 };
 
 /**
+* Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
 * При установки фокуса в поле ввода комментариев поставит признак true
 */
 function inputCommetsFocusIn() {
@@ -229,6 +230,7 @@ function inputCommetsFocusIn() {
 }
 
 /**
+* Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
 * При снятие фокуса с поле ввода хэш-тега поставит признак false
 */
 function inputHashtagFocusOut() {
@@ -266,6 +268,7 @@ const showSuccessMessage = () => {
 };
 
 /**
+ * Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
  * Удаление окна при упешной отправке изображения
  */
 function closeSuccessMessage () {
@@ -306,6 +309,10 @@ const showErrorsMessage = () => {
   closeErrorModalButton.addEventListener('click', onErrorModalCloseButton);
 };
 
+/**
+ * Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
+ * Функция закрывает подчищает после закрытия окна
+ */
 function closeErrorMessage () {
   whatModalOpen.isModalError = false;
   closeErrorModalButton.removeEventListener('click', onErrorModalCloseButton);
@@ -330,6 +337,7 @@ const onSubmitForm = (evt) => {
 };
 
 /**
+ * Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
  * Закрытие модального окна полноэкранного изображения
  */
 function closeModalEditImage () {
@@ -346,6 +354,7 @@ function closeModalEditImage () {
 }
 
 /**
+* Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
 * При снятие фокуса с поле textarea поставит признак false
 */
 function inputCommetsFocusOut () {
@@ -356,6 +365,7 @@ function inputCommetsFocusOut () {
 }
 
 /**
+ * Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
  * Закрытие окна по кнопке Х
  */
 function modalCloseButtonHandler() {
