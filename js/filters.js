@@ -1,4 +1,5 @@
-import {renderThumbnails} from './draw-thumbnails.js';
+import {getRandomUniqueElements} from './utils.js';
+const RANDOM_ITEMS = 10;
 
 /**
  * Фильтрует массив миниатюр и переключает кнопки
@@ -9,18 +10,19 @@ const filtering = (array, callback) => {
   const filterForm = document.querySelector('.img-filters');
   filterForm.classList.remove('img-filters--inactive');
   const onClickFilterButton = (evt) => {
-    filterForm.querySelector('.img-filters__button--active')
-      .classList.remove('img-filters__button--active');
     if (evt.target.matches('.img-filters__button')) {
+      filterForm.querySelector('.img-filters__button--active')
+        .classList.remove('img-filters__button--active');
       evt.target.classList.add('img-filters__button--active');
-      renderThumbnails(array.slice(0, 10));
       if (evt.target.matches('#filter-random')) {
-        console.log('Рандомные')
+        const uniquePhotos = getRandomUniqueElements(array, RANDOM_ITEMS);
+        callback(uniquePhotos);
       } else if (evt.target.matches('#filter-discussed')) {
-        console.log('Обсуждаемые')
+        const sortDiscussPhotos = array.slice().sort((a, b) => b.comments.length - a.comments.length);
+        callback(sortDiscussPhotos);
       } else {
         // По умолчанию
-        console.log('По умолчанию')
+        callback(array);
       }
     }
   };
