@@ -1,4 +1,3 @@
-import {createPhotoDescriptions} from './mock/demo-data.js';
 import {drawBigPicture, modalBigPicture} from './draw-big-picture.js';
 import {modalOpen, whatModalOpen} from './modal.js';
 
@@ -6,14 +5,14 @@ import {modalOpen, whatModalOpen} from './modal.js';
  * Рендер разметки миниатюр
  * @param {number} quantity - число миниатюр для генерации
  */
-const renderThumbnails = (quantity) => {
+const renderThumbnails = (array) => {
   const thumbnailsBlock = document.querySelector('.pictures');
   // @ts-ignore
   const thumbnailTemplate = document.querySelector('#picture').content;
   const fragmentThumbnail = document.createDocumentFragment();
 
   // Создаём миниатюры и ставим в раметку
-  createPhotoDescriptions(quantity).forEach(({url, likes, comments, description}) => {
+  array.forEach(({url, likes, comments, description}) => {
     const thumbnailItem = thumbnailTemplate.cloneNode(true);
 
     thumbnailItem.querySelector('.picture__img').src = url;

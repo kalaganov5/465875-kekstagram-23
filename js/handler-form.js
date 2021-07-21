@@ -122,7 +122,7 @@ const effectClickHandler = (evt, setDefault) => {
 const imageResizeHandler = (evt, setDefault) => {
   let scale = +scaleValue.value.replace('%', '');
   const imagePreview = uploadImagePreview.querySelector('img');
-  if (evt.target === scaleSmaller && scale !== 25) {
+  if (evt.target === scaleSmaller && scale !== SCALE_STEP) {
     scale -= SCALE_STEP;
     imagePreview.style.transform = `scale(0.${scale})`;
     scaleValue.value = `${scale}%`;
@@ -227,7 +227,7 @@ function inputHashtagFocusOut() {
 const closeModalEditImage = () => {
   closeModal(modalEditImage);
   setFormDefaultValue();
-  closeModalUpload.removeEventListener('click', сloseModalButton);
+  closeModalUpload.removeEventListener('click', modalCloseButtonHandler);
   inputHashtags.removeEventListener('input', hashtagValidationLive);
   inputHashtags.removeEventListener('focusout', inputHashtagFocusOut);
   comment.removeEventListener('focusout', inputCommetsFocusOut);
@@ -246,7 +246,7 @@ function inputCommetsFocusOut () {
 /**
  * Закрытие окна по кнопке Х
  */
-function сloseModalButton() {
+function modalCloseButtonHandler() {
   closeModalEditImage();
 }
 
@@ -256,7 +256,7 @@ function сloseModalButton() {
 const trackUploadImage = () => {
   modalOpen(modalEditImage);
   whatModalOpen.isModalFormEditor = true;
-  closeModalUpload.addEventListener('click', сloseModalButton);
+  closeModalUpload.addEventListener('click', modalCloseButtonHandler);
   inputHashtags.addEventListener('input', hashtagValidationLive);
   inputHashtags.addEventListener('focusout', inputHashtagFocusOut);
   comment.addEventListener('focusout', inputCommetsFocusOut);

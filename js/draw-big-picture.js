@@ -1,8 +1,36 @@
 import {closeModal} from './modal.js';
 let commentsBlock;
-
+const COMMENTS_STEP = 5;
 const modalBigPicture = document.querySelector('.big-picture');
 const modalCloseButton = modalBigPicture.querySelector('#picture-cancel');
+const moreCommentsButton = modalBigPicture.querySelector('.comments-loader');
+let commentsCountFrom = COMMENTS_STEP;
+const commentsCountFromElement = modalBigPicture.querySelector('.comments-count--from');
+const hiddenComment = [];
+
+/**
+ * Скрывает кнопку загрузки комментариев
+ *
+ */
+const hideMoreLoadButton = () => {
+  moreCommentsButton.classList.add('hidden');
+};
+
+/**
+ * Показ ещё 5 комментариев по кнопке "Загрузить ещё"
+ *
+ */
+const commentsLoadHandler = () => {
+  for(let i = 0; i < 5; i++) {
+    hiddenComment[0].classList.remove('hidden');
+    hiddenComment.splice(0, 1);
+    commentsCountFromElement.textContent++;
+    if (hiddenComment.length === 0) {
+      hideMoreLoadButton();
+      break;
+    }
+  }
+};
 
 /**
  * Закрытие модального окна полноэкранного изображения
@@ -11,6 +39,10 @@ const closeModalBigPicture = () => {
   closeModal(modalBigPicture);
   commentsBlock.innerHTML = '';
   modalCloseButton.removeEventListener('click', closeModalBigPicture);
+  if (hiddenComment.length !== 0) {
+    // Удаляем обработчик если ставили
+    moreCommentsButton.removeEventListener('click', commentsLoadHandler);
+  }
 };
 
 /**
@@ -24,17 +56,28 @@ const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
   // @ts-ignore
   modalBigPicture.querySelector('.big-picture__img').children[0].src = imageUrl;
   modalBigPicture.querySelector('.likes-count').textContent = likesNumber;
+  commentsCountFromElement.textContent = COMMENTS_STEP;
+  if (comments.length <= COMMENTS_STEP) {
+    commentsCountFrom = comments.length;
+    commentsCountFromElement.textContent = commentsCountFrom;
+  }
   modalBigPicture.querySelector('.comments-count').textContent = comments.length;
 
   // рендер комментариев
   commentsBlock = modalBigPicture.querySelector('.social__comments');
 
   const commentsFragment = new DocumentFragment();
+  // commentsCount = comments.length;
+  comments.forEach((comment, index) => {
 
-  comments.forEach((comment) => {
     const itemComment = document.createElement('li');
     itemComment.setAttribute('class', 'social__comment');
-
+    hideMoreLoadButton();
+    if (index > 4) {
+      itemComment.setAttribute('class', 'social__comment hidden');
+      hiddenComment.push(itemComment);
+      moreCommentsButton.classList.remove('hidden');
+    }
     const imageAuthor = document.createElement('img');
     imageAuthor.setAttribute('class', 'social__picture');
     imageAuthor.setAttribute('src', comment.avatar);
@@ -53,9 +96,13 @@ const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
 
   commentsBlock.appendChild(commentsFragment);
   modalBigPicture.querySelector('.social__caption').textContent = description;
-  modalBigPicture.querySelector('.social__comment-count').classList.add('hidden');
-  modalBigPicture.querySelector('.comments-loader').classList.add('hidden');
+  // modalBigPicture.querySelector('.social__comment-count').classList.add('hidden');
+  // modalBigPicture.querySelector('.comments-loader').classList.add('hidden');
   modalCloseButton.addEventListener('click', closeModalBigPicture);
+  if (hiddenComment.length !== 0) {
+    // Ставим обработчик на кнопку
+    moreCommentsButton.addEventListener('click', commentsLoadHandler);
+  }
 };
 
 export {drawBigPicture, modalBigPicture, closeModalBigPicture, modalCloseButton};
