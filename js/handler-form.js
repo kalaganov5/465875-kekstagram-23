@@ -2,6 +2,7 @@ import {modalOpen, closeModal, whatModalOpen, body, onModalEscape} from './modal
 import {hasInput} from './utils.js';
 import {sendFormData} from './api.js';
 const SCALE_STEP = 25;
+const TEXTAREA_MAX_LENGTH = 140;
 const form = document.querySelector('#upload-select-image');
 const uploadImage = form.querySelector('#upload-file');
 const modalEditImage = document.querySelector('.img-upload__overlay');
@@ -165,6 +166,7 @@ const hashtagValidationLive = () => {
   hashtags = inputHashtags.value.toLowerCase().split(' ');
   for (let i = 0; i < hashtags.length; i++) {
     if (hashtags.length === 0) {
+      inputHashtags.style.borderColor = 'inherit';
       inputHashtags.setCustomValidity('');
     } else if (hashtags[i][0] !== '#' && hashtags[i].length >= 1) {
       // начинаем с решетки, иначе ставим
@@ -182,15 +184,19 @@ const hashtagValidationLive = () => {
       inputHashtags.value = hashtags.join(' ');
     } else if (hashtags[i].indexOf('#', 2) !== -1 || hashtags[i][1] === '#') {
       // Проверка вторым символом или последующим #
+      inputHashtags.style.borderColor = 'red';
       inputHashtags.setCustomValidity(`# только вначале ${hashtags[i]}`);
       break;
     } else if (hashtags[i].length > 20) {
+      inputHashtags.style.borderColor = 'red';
       inputHashtags.setCustomValidity(`Хэш-тег "${hashtags[i]}" не может быть более 20 символов. У вас ${hashtags[i].length}`);
       break;
     } else if (hasDuplicates(hashtags) && hashtags[hashtags.length - 1] !== '') {
+      inputHashtags.style.borderColor = 'red';
       inputHashtags.setCustomValidity(`Такой уже есть. ${hashtags[i].toUpperCase()} и ${hashtags[i].toLowerCase()} равны`);
       break;
     } else if (hashtags.length > 5 && hashtags[hashtags.length - 1] !== '') {
+      inputHashtags.style.borderColor = 'red';
       inputHashtags.setCustomValidity(`Не более 5 хэштегов, лишний "${hashtags[hashtags.length - 1]}"`);
       break;
     } else {
@@ -200,9 +206,11 @@ const hashtagValidationLive = () => {
           // 1 Проверить что последний хэштег не пустой иначе удалить его
           hashtags.splice(j, 1);
         } else if (hashtagPattern.test(hashtags[j]) === false && hashtags[j] !== '') {
+          inputHashtags.style.borderColor = 'red';
           inputHashtags.setCustomValidity(`Хэштег "${hashtags[j]}" не может содержать спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.`);
           break;
         } else {
+          inputHashtags.style.borderColor = 'inherit';
           inputHashtags.setCustomValidity('');
         }
       }
@@ -215,6 +223,9 @@ const hashtagValidationLive = () => {
 */
 function inputCommetsFocusIn() {
   hasInput.textarea = true;
+  if (comment.value.length <= TEXTAREA_MAX_LENGTH) {
+    comment.style.borderColor = 'inherit';
+  }
 }
 
 /**
@@ -339,6 +350,9 @@ function closeModalEditImage () {
 */
 function inputCommetsFocusOut () {
   hasInput.textarea = false;
+  if (comment.value.length > TEXTAREA_MAX_LENGTH) {
+    comment.style.borderColor = 'red';
+  }
 }
 
 /**
