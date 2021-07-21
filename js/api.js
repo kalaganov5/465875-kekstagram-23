@@ -1,5 +1,6 @@
 import {renderThumbnails} from './draw-thumbnails.js';
 const DATA_URL = 'https://23.javascript.pages.academy/kekstagram/data';
+const FORM_DATA = 'https://23.javascript.pages.academy/kekstagram';
 
 // берем данные с сервера
 const getPhotos = () => {
@@ -16,4 +17,23 @@ const getPhotos = () => {
     });
 };
 
-export {getPhotos};
+const sendFormData = (onSuccess, onFail, body) => {
+  fetch(FORM_DATA,
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      }
+    })
+    .catch(() => {
+      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+    });
+};
+
+export {getPhotos, sendFormData};

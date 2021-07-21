@@ -1,5 +1,6 @@
-import {modalOpen, closeModal, whatModalOpen} from './modal.js';
+import {modalOpen, closeModal, whatModalOpen, body, onModalEscape} from './modal.js';
 import {hasInput} from './utils.js';
+import {sendFormData} from './api.js';
 const SCALE_STEP = 25;
 const form = document.querySelector('#upload-select-image');
 const uploadImage = form.querySelector('#upload-file');
@@ -143,7 +144,6 @@ const setFormDefaultValue = () => {
   form.reset();
   imageResizeHandler(false, true);
   effectClickHandler(false, true);
-  // effectSlider.noUiSlider.destroy();
 };
 
 
@@ -221,10 +221,87 @@ function inputHashtagFocusOut() {
   hasInput.hashtags = false;
 }
 
+const onModalSuccessClick = (evt) => {
+  if (evt.target.matches('.success')) {
+    closeSuccessMessage();
+  }
+};
+
+const onSuccessModalCloseButton = () => {
+  closeSuccessMessage();
+};
+
+let closeSuccessModalButton;
+let modalSucces;
+const showSuccessMessage = () => {
+  const successTemplate = document.querySelector('#success').content.cloneNode(true);
+  whatModalOpen.isModalSubmit = true;
+  body.appendChild(successTemplate);
+  document.addEventListener('keydown', onModalEscape);
+  closeSuccessModalButton = document.querySelector('.success__button');
+  modalSucces = document.querySelector('.success');
+  modalSucces.addEventListener('click', onModalSuccessClick);
+  closeSuccessModalButton.addEventListener('click', onSuccessModalCloseButton);
+};
+
+function closeSuccessMessage () {
+  whatModalOpen.isModalSubmit = false;
+  closeSuccessModalButton.removeEventListener('click', onSuccessModalCloseButton);
+  modalSucces.addEventListener('click', onModalSuccessClick);
+  modalSucces.remove();
+  document.removeEventListener('keydown', onModalEscape);
+}
+
+const onErrorModalCloseButton = () => {
+  closeErrorMessage();
+};
+
+const onModalErrorsClick = (evt) => {
+  if (evt.target.matches('.error')) {
+    closeErrorMessage();
+  }
+};
+
+let closeErrorModalButton;
+let modalError;
+const showErrorsMessage = () => {
+  const successTemplate = document.querySelector('#error').content.cloneNode(true);
+  whatModalOpen.isModalError = true;
+  body.appendChild(successTemplate);
+  document.addEventListener('keydown', onModalEscape);
+  closeErrorModalButton = document.querySelector('.error__button');
+  modalError = document.querySelector('.error');
+  modalError.addEventListener('click', onModalErrorsClick);
+  closeErrorModalButton.addEventListener('click', onErrorModalCloseButton);
+};
+
+function closeErrorMessage () {
+  whatModalOpen.isModalError = false;
+  closeErrorModalButton.removeEventListener('click', onErrorModalCloseButton);
+  modalError.addEventListener('click', onModalErrorsClick);
+  modalError.remove();
+  document.removeEventListener('keydown', onModalEscape);
+}
+
+const onSubmitForm = (evt) => {
+  evt.preventDefault();
+  sendFormData(
+    () => {
+      closeModalEditImage();
+      showSuccessMessage();
+    },
+    () => {
+      closeModalEditImage();
+      showErrorsMessage();
+    },
+    new FormData(evt.target),
+  );
+};
+
 /**
  * Закрытие модального окна полноэкранного изображения
  */
-const closeModalEditImage = () => {
+function closeModalEditImage () {
   closeModal(modalEditImage);
   setFormDefaultValue();
   closeModalUpload.removeEventListener('click', modalCloseButtonHandler);
@@ -234,7 +311,8 @@ const closeModalEditImage = () => {
   comment.removeEventListener('focusin', inputCommetsFocusIn);
   scaleImage.removeEventListener('click', imageResizeHandler);
   effect.removeEventListener('click', effectClickHandler);
-};
+  form.removeEventListener('submit', onSubmitForm);
+}
 
 /**
 * При снятие фокуса с поле textarea поставит признак false
@@ -263,6 +341,7 @@ const trackUploadImage = () => {
   comment.addEventListener('focusin', inputCommetsFocusIn);
   scaleImage.addEventListener('click', imageResizeHandler);
   effect.addEventListener('click', effectClickHandler);
+  form.addEventListener('submit', onSubmitForm);
 };
 
 /*
@@ -270,4 +349,4 @@ const trackUploadImage = () => {
 */
 uploadImage.addEventListener('change', trackUploadImage);
 
-export {closeModalEditImage, inputHashtags};
+export {closeModalEditImage, inputHashtags, closeSuccessMessage, closeErrorMessage};
