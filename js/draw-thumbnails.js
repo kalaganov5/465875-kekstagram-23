@@ -1,6 +1,16 @@
 import {createPhotoDescriptions} from './mock/demo-data.js';
+// import {createFetch} from './api.js';
 import {drawBigPicture, modalBigPicture} from './draw-big-picture.js';
 import {modalOpen, whatModalOpen} from './modal.js';
+
+// const renderUserPhotos = createFetch(
+//   (photos) => {
+//     console.log(photos);
+//   },
+//   (err) => {
+//     console.log(err);
+//   },
+// );
 
 /**
  * Рендер разметки миниатюр

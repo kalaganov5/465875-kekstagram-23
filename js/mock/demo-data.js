@@ -43,7 +43,7 @@ const createPicturesDescription = (__, index) => ({
   description: PHOTO_DESCRIPTION[getRandomNumber(0, PHOTO_DESCRIPTION.length - 1)], // Вопрос: JS Doc ругается если указать принимаемый параметр @param {Number}, при передаче (0, PHOTO_DESCRIPTION.length - 1). Какой принимаемый параметр указать?
   likes: getRandomNumber(15, 200),
   // создаем массив случайной длины
-  comments: new Array(getRandomNumber(1,5))
+  comments: new Array(getRandomNumber(1,15))
   // заполняем массив
     .fill(null)
   // заполяем комментариями
