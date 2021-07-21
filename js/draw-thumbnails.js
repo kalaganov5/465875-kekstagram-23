@@ -2,6 +2,16 @@ import {drawBigPicture, modalBigPicture} from './draw-big-picture.js';
 import {modalOpen, whatModalOpen} from './modal.js';
 
 /**
+ * Очистка разметки миниатюр, нужен если работает фильтр
+ */
+const clearThumbnail = () => {
+  const thumbnailsOld = document.querySelectorAll('.picture');
+  for(let i = 0; i < thumbnailsOld.length; i++) {
+    thumbnailsOld[i].remove();
+  }
+};
+
+/**
  * Рендер разметки миниатюр
  * @param {Array} array - Массив с данными
  */
@@ -27,16 +37,11 @@ const renderThumbnails = (array) => {
       modalOpen(modalBigPicture);
       whatModalOpen.isModalBigPicture = true;
     });
-
     fragmentThumbnail.appendChild(thumbnailItem);
   });
-
+  clearThumbnail();
   // Добавляем фрагмент в разметку
   thumbnailsBlock.appendChild(fragmentThumbnail);
 };
-
-// const removeThumbnails = (element) => {
-//   element.remove();
-// };
 
 export {renderThumbnails};

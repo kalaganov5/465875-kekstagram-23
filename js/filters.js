@@ -14,6 +14,14 @@ const filtering = (array, callback) => {
     if (evt.target.matches('.img-filters__button')) {
       evt.target.classList.add('img-filters__button--active');
       renderThumbnails(array.slice(0, 10));
+      if (evt.target.matches('#filter-random')) {
+        console.log('Рандомные')
+      } else if (evt.target.matches('#filter-discussed')) {
+        console.log('Обсуждаемые')
+      } else {
+        // По умолчанию
+        console.log('По умолчанию')
+      }
     }
   };
   filterForm.addEventListener('click', onClickFilterButton);
