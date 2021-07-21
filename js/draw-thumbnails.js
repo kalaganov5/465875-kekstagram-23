@@ -7,7 +7,6 @@ import {modalOpen, whatModalOpen} from './modal.js';
  */
 const renderThumbnails = (array) => {
   const thumbnailsBlock = document.querySelector('.pictures');
-  // @ts-ignore
   const thumbnailTemplate = document.querySelector('#picture').content;
   const fragmentThumbnail = document.createDocumentFragment();
 
@@ -31,8 +30,13 @@ const renderThumbnails = (array) => {
 
     fragmentThumbnail.appendChild(thumbnailItem);
   });
+
   // Добавляем фрагмент в разметку
   thumbnailsBlock.appendChild(fragmentThumbnail);
 };
+
+// const removeThumbnails = (element) => {
+//   element.remove();
+// };
 
 export {renderThumbnails};
