@@ -1,11 +1,13 @@
 import {closeModalBigPicture} from './draw-big-picture.js';
-import {closeModalEditImage} from './handler-form.js';
+import {closeModalEditImage, closeSuccessMessage, closeErrorMessage} from './handler-form.js';
 import {hasInput} from './utils.js';
 
 const body = document.querySelector('body');
 const whatModalOpen = {
   isModalBigPicture: false,
   isModalFormEditor: false,
+  isModalSubmit: false,
+  isModalError: false,
 };
 
 /**
@@ -20,6 +22,10 @@ const onModalEscape = (evt) => {
       closeModalBigPicture();
     } else if (whatModalOpen.isModalFormEditor) {
       closeModalEditImage();
+    } else if (whatModalOpen.isModalSubmit) {
+      closeSuccessMessage();
+    } else if (whatModalOpen.isModalError) {
+      closeErrorMessage();
     }
   }
 };
@@ -46,4 +52,4 @@ const closeModal = (elementModal) => {
   whatModalOpen.isModalFormEditor = false;
 };
 
-export {modalOpen, closeModal, whatModalOpen};
+export {modalOpen, closeModal, whatModalOpen, body, onModalEscape};

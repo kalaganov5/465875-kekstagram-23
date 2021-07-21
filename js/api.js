@@ -1,30 +1,53 @@
 import {renderThumbnails} from './draw-thumbnails.js';
-// const createFetch = (onSuccess, onError) => {
-//   fetch('https://23.javascript.pages.academy/kekstagram/data')
-//     .then((response) => {
-//       if (response.ok) {
-//         return response.json();
-//       }
-//       throw new Error(`${response.status} ${response.statusText}`);
-//     })
-//     .then((json) => {
-//       onSuccess(json);
-//     })
-//     .catch((err) => {
-//       onError(err);
-//     });
-// };
-
+import {filtering} from './filters.js';
+import {debounce} from './utils/debounce.js';
+const DATA_URL = 'https://23.javascript.pages.academy/kekstagram/data';
+const FORM_DATA = 'https://23.javascript.pages.academy/kekstagram';
 
 // берем данные с сервера
-fetch('https://23.javascript.pages.academy/kekstagram/data')
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    // Здесь должно быть функция показ ошибки при загрузки данных
-    throw new Error(`${response.status} ${response.statusText}`);
-  })
-  .then((userPhotos) => {
-    renderThumbnails(userPhotos);
-  });
+const getPhotos = () => {
+  fetch(DATA_URL)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      // Если ошибки при загрузки данных
+      const errorMessage = document.createElement('p');
+      errorMessage.style.textAlign = 'center';
+      errorMessage.textContent = 'Ошибка загрузки данных';
+      document.body.prepend(errorMessage);
+      throw new Error(`${response.status} ${response.statusText}`);
+    })
+    .then((userPhotos) => {
+      renderThumbnails(userPhotos);
+      filtering(userPhotos, debounce(renderThumbnails));
+    });
+};
+
+/**
+ * Отправка данных на сервер с формы
+ *
+ * @param {*} onSuccess
+ * @param {*} onFail
+ * @param {*} body
+ */
+const sendFormData = (onSuccess, onFail, body) => {
+  fetch(FORM_DATA,
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      }
+    })
+    .catch(() => {
+      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+    });
+};
+
+export {getPhotos, sendFormData};

@@ -1,12 +1,12 @@
 import {closeModal} from './modal.js';
-let commentsBlock;
 const COMMENTS_STEP = 5;
 const modalBigPicture = document.querySelector('.big-picture');
 const modalCloseButton = modalBigPicture.querySelector('#picture-cancel');
 const moreCommentsButton = modalBigPicture.querySelector('.comments-loader');
-let commentsCountFrom = COMMENTS_STEP;
 const commentsCountFromElement = modalBigPicture.querySelector('.comments-count--from');
 const hiddenComment = [];
+let commentsCountFrom = COMMENTS_STEP;
+let commentsBlock;
 
 /**
  * Скрывает кнопку загрузки комментариев
@@ -53,7 +53,6 @@ const closeModalBigPicture = () => {
  * @param {string} description - описание просматриваемой фотографии
  */
 const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
-  // @ts-ignore
   modalBigPicture.querySelector('.big-picture__img').children[0].src = imageUrl;
   modalBigPicture.querySelector('.likes-count').textContent = likesNumber;
   commentsCountFromElement.textContent = COMMENTS_STEP;
@@ -73,7 +72,7 @@ const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
     const itemComment = document.createElement('li');
     itemComment.setAttribute('class', 'social__comment');
     hideMoreLoadButton();
-    if (index > 4) {
+    if (index > COMMENTS_STEP - 1) {
       itemComment.setAttribute('class', 'social__comment hidden');
       hiddenComment.push(itemComment);
       moreCommentsButton.classList.remove('hidden');
@@ -96,8 +95,6 @@ const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
 
   commentsBlock.appendChild(commentsFragment);
   modalBigPicture.querySelector('.social__caption').textContent = description;
-  // modalBigPicture.querySelector('.social__comment-count').classList.add('hidden');
-  // modalBigPicture.querySelector('.comments-loader').classList.add('hidden');
   modalCloseButton.addEventListener('click', closeModalBigPicture);
   if (hiddenComment.length !== 0) {
     // Ставим обработчик на кнопку
