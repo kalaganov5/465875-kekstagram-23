@@ -1,6 +1,11 @@
 import {renderThumbnails} from './draw-thumbnails.js';
 
-const filtering = (array) => {
+/**
+ * Фильтрует массив миниатюр и переключает кнопки
+ * @param {*} array - массив с данными
+ * @param {*} callback - функция генерации миниатюр
+ */
+const filtering = (array, callback) => {
   const filterForm = document.querySelector('.img-filters');
   filterForm.classList.remove('img-filters--inactive');
   const onClickFilterButton = (evt) => {
@@ -12,7 +17,6 @@ const filtering = (array) => {
     }
   };
   filterForm.addEventListener('click', onClickFilterButton);
-  // console.log(array.slice(0, 10))
 };
 
 export {filtering};
