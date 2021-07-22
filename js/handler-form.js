@@ -161,7 +161,6 @@ const hasDuplicates = (array) => (new Set(array)).size !== array.length;
  * Валидация хэш-тега при вводе
  */
 const hashtagValidationLive = () => {
-  hasInput.hashtags = true;
   // Создаём массив из хештегов
   hashtags = inputHashtags.value.toLowerCase().split(' ');
   for (let i = 0; i < hashtags.length; i++) {
@@ -227,6 +226,14 @@ function inputCommetsFocusIn() {
   if (comment.value.length <= TEXTAREA_MAX_LENGTH) {
     comment.style.borderColor = 'inherit';
   }
+}
+
+/**
+* Намеренно используется function declaration, т.к. при стрелке выходит ошибка использование до объявления
+* При установке фокуса с поле ввода хэш-тега поставит признак true
+*/
+function inputHashtagFocusIn() {
+  hasInput.hashtags = true;
 }
 
 /**
@@ -346,6 +353,7 @@ function closeModalEditImage () {
   closeModalUpload.removeEventListener('click', modalCloseButtonHandler);
   inputHashtags.removeEventListener('input', hashtagValidationLive);
   inputHashtags.removeEventListener('focusout', inputHashtagFocusOut);
+  inputHashtags.removeEventListener('focusin', inputHashtagFocusIn);
   comment.removeEventListener('focusout', inputCommetsFocusOut);
   comment.removeEventListener('focusin', inputCommetsFocusIn);
   scaleImage.removeEventListener('click', imageResizeHandler);
@@ -380,6 +388,7 @@ const trackUploadImage = () => {
   whatModalOpen.isModalFormEditor = true;
   closeModalUpload.addEventListener('click', modalCloseButtonHandler);
   inputHashtags.addEventListener('input', hashtagValidationLive);
+  inputHashtags.addEventListener('focusin', inputHashtagFocusIn);
   inputHashtags.addEventListener('focusout', inputHashtagFocusOut);
   comment.addEventListener('focusout', inputCommetsFocusOut);
   comment.addEventListener('focusin', inputCommetsFocusIn);
