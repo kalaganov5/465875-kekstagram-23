@@ -160,7 +160,7 @@ const hasDuplicates = (array) => (new Set(array)).size !== array.length;
 /**
  * Валидация хэш-тега при вводе
  */
-const hashtagValidationLive = () => {
+const checkingHashtag = () => {
   // Создаём массив из хештегов
   hashtags = inputHashtags.value.toLowerCase().split(' ');
   for (let i = 0; i < hashtags.length; i++) {
@@ -351,7 +351,7 @@ function closeModalEditImage () {
   closeModal(modalEditImage);
   setFormDefaultValue();
   closeModalUpload.removeEventListener('click', modalCloseButtonHandler);
-  inputHashtags.removeEventListener('input', hashtagValidationLive);
+  inputHashtags.removeEventListener('input', checkingHashtag);
   inputHashtags.removeEventListener('focusout', inputHashtagFocusOut);
   inputHashtags.removeEventListener('focusin', inputHashtagFocusIn);
   comment.removeEventListener('focusout', inputCommetsFocusOut);
@@ -387,7 +387,7 @@ const trackUploadImage = () => {
   openModal(modalEditImage);
   whatModalOpen.isModalFormEditor = true;
   closeModalUpload.addEventListener('click', modalCloseButtonHandler);
-  inputHashtags.addEventListener('input', hashtagValidationLive);
+  inputHashtags.addEventListener('input', checkingHashtag);
   inputHashtags.addEventListener('focusin', inputHashtagFocusIn);
   inputHashtags.addEventListener('focusout', inputHashtagFocusOut);
   comment.addEventListener('focusout', inputCommetsFocusOut);
