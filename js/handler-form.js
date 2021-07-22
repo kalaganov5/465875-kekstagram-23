@@ -158,6 +158,26 @@ const setFormDefaultValue = () => {
 const hasDuplicates = (array) => (new Set(array)).size !== array.length;
 
 /**
+ * Финальная проверка хэштега, проверяет заново все хэштеги с начала и до конца
+ * без неё хэштег #fafdsaf # #sdafdsadfasf прошёл бы валидацию
+ */
+const checkingHashtagFinal = () => {
+  for (let j = 0; j < hashtags.length; j++) {
+    if (hashtags[j] === '' && hashtags.length > 1) {
+      // 1 Проверить что последний хэштег не пустой иначе удалить его
+      hashtags.splice(j, 1);
+    } else if (hashtagPattern.test(hashtags[j]) === false && hashtags[j] !== '') {
+      inputHashtags.style.borderColor = 'red';
+      inputHashtags.setCustomValidity(`Хэштег "${hashtags[j]}" не может содержать спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.`);
+      break;
+    } else {
+      inputHashtags.style.borderColor = 'inherit';
+      inputHashtags.setCustomValidity('');
+    }
+  }
+};
+
+/**
  * Валидация хэш-тега при вводе
  */
 const checkingHashtag = () => {
@@ -199,20 +219,8 @@ const checkingHashtag = () => {
       inputHashtags.setCustomValidity(`Не более 5 хэштегов, лишний "${hashtags[hashtags.length - 1]}"`);
       break;
     } else {
-      // Конструкция нужно для финальной проверки, например #fafdsaf # #sdafdsadfasf
-      for (let j = 0; j < hashtags.length; j++) {
-        if (hashtags[j] === '' && hashtags.length > 1) {
-          // 1 Проверить что последний хэштег не пустой иначе удалить его
-          hashtags.splice(j, 1);
-        } else if (hashtagPattern.test(hashtags[j]) === false && hashtags[j] !== '') {
-          inputHashtags.style.borderColor = 'red';
-          inputHashtags.setCustomValidity(`Хэштег "${hashtags[j]}" не может содержать спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.`);
-          break;
-        } else {
-          inputHashtags.style.borderColor = 'inherit';
-          inputHashtags.setCustomValidity('');
-        }
-      }
+      // Функция нужна для финальной проверки, например #fafdsaf # #sdafdsadfasf
+      checkingHashtagFinal();
     }
   }
 };
