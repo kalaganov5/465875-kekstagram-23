@@ -218,10 +218,9 @@ const checkingHashtag = () => {
       inputHashtags.style.borderColor = 'red';
       inputHashtags.setCustomValidity(`Не более 5 хэштегов, лишний "${hashtags[hashtags.length - 1]}"`);
       break;
-    } else {
-      // Функция нужна для финальной проверки, например #fafdsaf # #sdafdsadfasf
-      checkingHashtagFinal();
     }
+    // Функция нужна для финальной проверки, например #fafdsaf # #sdafdsadfasf
+    checkingHashtagFinal();
   }
 };
 
