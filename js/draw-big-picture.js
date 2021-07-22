@@ -4,7 +4,7 @@ const modalBigPicture = document.querySelector('.big-picture');
 const modalCloseButton = modalBigPicture.querySelector('#picture-cancel');
 const moreCommentsButton = modalBigPicture.querySelector('.comments-loader');
 const commentsCountFromElement = modalBigPicture.querySelector('.comments-count--from');
-const hiddenComment = [];
+const hiddenComments = [];
 let commentsCountFrom = COMMENTS_STEP;
 let commentsBlock;
 
@@ -22,10 +22,10 @@ const hideMoreLoadButton = () => {
  */
 const commentsLoadHandler = () => {
   for(let i = 0; i < 5; i++) {
-    hiddenComment[0].classList.remove('hidden');
-    hiddenComment.splice(0, 1);
+    hiddenComments[0].classList.remove('hidden');
+    hiddenComments.splice(0, 1);
     commentsCountFromElement.textContent++;
-    if (hiddenComment.length === 0) {
+    if (hiddenComments.length === 0) {
       hideMoreLoadButton();
       break;
     }
@@ -39,7 +39,7 @@ const closeModalBigPicture = () => {
   closeModal(modalBigPicture);
   commentsBlock.innerHTML = '';
   modalCloseButton.removeEventListener('click', closeModalBigPicture);
-  if (hiddenComment.length !== 0) {
+  if (hiddenComments.length !== 0) {
     // Удаляем обработчик если ставили
     moreCommentsButton.removeEventListener('click', commentsLoadHandler);
   }
@@ -74,7 +74,7 @@ const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
     hideMoreLoadButton();
     if (index > COMMENTS_STEP - 1) {
       itemComment.setAttribute('class', 'social__comment hidden');
-      hiddenComment.push(itemComment);
+      hiddenComments.push(itemComment);
       moreCommentsButton.classList.remove('hidden');
     }
     const imageAuthor = document.createElement('img');
@@ -96,7 +96,7 @@ const drawBigPicture = (imageUrl, likesNumber, comments, description) => {
   commentsBlock.appendChild(commentsFragment);
   modalBigPicture.querySelector('.social__caption').textContent = description;
   modalCloseButton.addEventListener('click', closeModalBigPicture);
-  if (hiddenComment.length !== 0) {
+  if (hiddenComments.length !== 0) {
     // Ставим обработчик на кнопку
     moreCommentsButton.addEventListener('click', commentsLoadHandler);
   }
