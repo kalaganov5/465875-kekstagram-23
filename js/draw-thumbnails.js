@@ -1,5 +1,5 @@
 import {drawBigPicture, modalBigPicture} from './draw-big-picture.js';
-import {modalOpen, whatModalOpen} from './modal.js';
+import {openModal, whatModalOpen} from './modal.js';
 
 /**
  * Очистка разметки миниатюр, нужен если работает фильтр
@@ -34,7 +34,7 @@ const renderThumbnails = (array) => {
     const link = thumbnailItem.querySelector('.picture');
     link.addEventListener('click', () => {
       drawBigPicture(url, likes, comments, description);
-      modalOpen(modalBigPicture);
+      openModal(modalBigPicture);
       whatModalOpen.isModalBigPicture = true;
     });
     fragmentThumbnail.appendChild(thumbnailItem);

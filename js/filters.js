@@ -6,7 +6,7 @@ const RANDOM_ITEMS = 10;
  * @param {*} array - массив с данными
  * @param {*} callback - функция генерации миниатюр
  */
-const filtering = (array, callback) => {
+const setFilter = (array, callback) => {
   const filterForm = document.querySelector('.img-filters');
   filterForm.classList.remove('img-filters--inactive');
   const onClickFilterButton = (evt) => {
@@ -29,4 +29,4 @@ const filtering = (array, callback) => {
   filterForm.addEventListener('click', onClickFilterButton);
 };
 
-export {filtering};
+export {setFilter};

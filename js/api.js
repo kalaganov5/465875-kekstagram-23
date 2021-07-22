@@ -1,5 +1,5 @@
 import {renderThumbnails} from './draw-thumbnails.js';
-import {filtering} from './filters.js';
+import {setFilter} from './filters.js';
 import {debounce} from './utils/debounce.js';
 const DATA_URL = 'https://23.javascript.pages.academy/kekstagram/data';
 const FORM_DATA = 'https://23.javascript.pages.academy/kekstagram';
@@ -20,7 +20,7 @@ const getPhotos = () => {
     })
     .then((userPhotos) => {
       renderThumbnails(userPhotos);
-      filtering(userPhotos, debounce(renderThumbnails));
+      setFilter(userPhotos, debounce(renderThumbnails));
     });
 };
 

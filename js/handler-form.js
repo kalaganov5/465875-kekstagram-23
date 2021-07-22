@@ -1,4 +1,4 @@
-import {modalOpen, closeModal, whatModalOpen, body, onModalEscape} from './modal.js';
+import {openModal, closeModal, whatModalOpen, body, onModalEscape} from './modal.js';
 import {hasInput} from './utils.js';
 import {sendFormData} from './api.js';
 const SCALE_STEP = 25;
@@ -384,7 +384,7 @@ function modalCloseButtonHandler() {
  * Открывает модальное окно если избражение загружено
  */
 const trackUploadImage = () => {
-  modalOpen(modalEditImage);
+  openModal(modalEditImage);
   whatModalOpen.isModalFormEditor = true;
   closeModalUpload.addEventListener('click', modalCloseButtonHandler);
   inputHashtags.addEventListener('input', hashtagValidationLive);

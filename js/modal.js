@@ -33,7 +33,7 @@ const onModalEscape = (evt) => {
 /**
  * Открытие модального окна
  */
-const modalOpen = (elementModal) => {
+const openModal = (elementModal) => {
   elementModal.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onModalEscape);
@@ -52,4 +52,4 @@ const closeModal = (elementModal) => {
   whatModalOpen.isModalFormEditor = false;
 };
 
-export {modalOpen, closeModal, whatModalOpen, body, onModalEscape};
+export {openModal, closeModal, whatModalOpen, body, onModalEscape};
