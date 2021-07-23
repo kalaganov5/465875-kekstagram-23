@@ -12,6 +12,7 @@ const hashtagPattern = /^#[A-Za-zА-Яа-я0-9-EеЁё]{1,19}$/;
 const comment = form.querySelector('.text__description');
 const scaleImage = form.querySelector('.img-upload__scale');
 const uploadImagePreview = form.querySelector('.img-upload__preview');
+const imagePreview = uploadImagePreview.querySelector('img');
 const scaleSmaller = form.querySelector('.scale__control--smaller');
 const scaleBigger = form.querySelector('.scale__control--bigger');
 const scaleValue = form.querySelector('.scale__control--value');
@@ -126,7 +127,6 @@ const effectClickHandler = (evt, setDefault) => {
  */
 const imageResizeHandler = (evt, setDefault) => {
   let scale = +scaleValue.value.replace('%', '');
-  const imagePreview = uploadImagePreview.querySelector('img');
   if (evt.target === scaleSmaller && scale !== SCALE_STEP) {
     scale -= SCALE_STEP;
     imagePreview.style.transform = `scale(0.${scale})`;
@@ -388,9 +388,20 @@ function modalCloseButtonHandler() {
 }
 
 /**
+ * Фунция подставляет выбранное пользователем
+ * изображение в форму редактирования.
+ */
+const setImagePreview = () => {
+  const fileUploaded = uploadImage.files[0];
+  const uploadedImageURL = URL.createObjectURL(fileUploaded);
+  imagePreview.src = uploadedImageURL;
+};
+
+/**
  * Открывает модальное окно если избражение загружено
  */
 const trackUploadImage = () => {
+  setImagePreview();
   openModal(modalEditImage);
   whatModalOpen.isModalFormEditor = true;
   closeModalUpload.addEventListener('click', modalCloseButtonHandler);
